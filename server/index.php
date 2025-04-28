@@ -5,12 +5,14 @@ function makeGetRequest($url, $headers = [])
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Follow redirects
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Set timeout to avoid hanging
 
     $response = curl_exec($ch);
     $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $error = curl_errno($ch) ? curl_error($ch) : null;
+
+    $error = null;
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+    }
 
     curl_close($ch);
 
@@ -20,25 +22,39 @@ function makeGetRequest($url, $headers = [])
         'error' => $error
     ];
 }
-// Determine the current domain
+
 $current_domain = '';
 if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-    // Sanitize HTTP_X_FORWARDED_HOST
-    $current_domain = filter_var($_SERVER['HTTP_X_FORWARDED_HOST'], FILTER_SANITIZE_URL);
-    $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $current_domain;
-} elseif (isset($_SERVER['HTTP_REFERER'])) {
-    // Parse and validate HTTP_REFERER
-    $parsed_url = parse_url($_SERVER['HTTP_REFERER']);
-    if (isset($parsed_url['host'])) {
-        $current_domain = (isset($parsed_url['scheme']) ? $parsed_url['scheme'] : 'http') . '://' . filter_var($parsed_url['host'], FILTER_SANITIZE_URL);
-    }
+    $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_X_FORWARDED_HOST'];
+} else if (isset($_SERVER['HTTP_REFERER'])) {
+    $current_domain = $_SERVER['HTTP_REFERER'];
+} else {
+    $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 }
-if (empty($current_domain)) {
-    // Fallback to HTTP_HOST
-    $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . filter_var($_SERVER['HTTP_HOST'], FILTER_SANITIZE_URL);
-}
+$response = makeGetRequest('https://minimil.onrender.com/api/websites?domain=' . $current_domain);
 
-echo "Current domain: $current_domain\n";
+echo $response['content'];
 
-include "themes/theme1/index.php"
-    ?>
+// $responseData = json_decode($response['content']);
+// $page = isset($responseData->data->template) ? $responseData->data->template : '';
+// $validPages = [
+//     '1' => 'themes/theme1/index.php',
+// ];
+
+// if (array_key_exists($page, $validPages) && file_exists($validPages[$page])) {
+//     include $validPages[$page];
+// }
+
+// $response_fb = makeGetRequest('https://minimil.onrender.com/api/websites?domain_fb=' . $current_domain);
+// $responseData_fb = json_decode($response_fb['content']);
+// $page_fb = isset($responseData_fb->data->fb_template) ? $responseData_fb->data->fb_template : '';
+// $validPages_fb = [
+//     '1' => 'fb_themes/theme1/index.php',
+//     '2' => 'fb_themes/theme2/index.php',
+//     '3' => 'fb_themes/theme3/index.php',
+// ];
+
+// if (array_key_exists($page_fb, $validPages_fb) && file_exists($validPages_fb[$page_fb])) {
+//     include $validPages_fb[$page_fb];
+// }
+?>
