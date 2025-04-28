@@ -1,5 +1,3 @@
-<base href="fb_themes/theme1/">
-
 <!DOCTYPE html>
 <html lang="vi">
 
