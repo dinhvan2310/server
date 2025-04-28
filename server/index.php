@@ -31,9 +31,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 } else {
     $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 }
-$response = makeGetRequest('https://minimil.onrender.com/api/websites?domain=' . $current_domain);
-
-echo $response['content'];
+// $response = makeGetRequest('https://minimil.onrender.com/api/websites?domain=' . $current_domain);
 
 // $responseData = json_decode($response['content']);
 // $page = isset($responseData->data->template) ? $responseData->data->template : '';
