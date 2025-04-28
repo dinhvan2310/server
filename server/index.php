@@ -30,28 +30,28 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 } else {
     $current_domain = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 }
-$response = makeGetRequest('https://minimil.onrender.com/api/websites?domain='. $current_domain);
+// $response = makeGetRequest('https://minimil.onrender.com/api/websites?domain='. $current_domain);
 
-$responseData = json_decode($response['content']);
-$page = isset($responseData->data->template) ? $responseData->data->template : '';
-$validPages = [
-    '1' => 'themes/theme1/index.php',
-];
+// $responseData = json_decode($response['content']);
+// $page = isset($responseData->data->template) ? $responseData->data->template : '';
+// $validPages = [
+//     '1' => 'themes/theme1/index.php',
+// ];
 
-if (array_key_exists($page, $validPages) && file_exists($validPages[$page])) {
-    include $validPages[$page];
-}
+// if (array_key_exists($page, $validPages) && file_exists($validPages[$page])) {
+//     include $validPages[$page];
+// }
 
-$response_fb = makeGetRequest('https://minimil.onrender.com/api/websites?domain_fb='. $current_domain);
-$responseData_fb = json_decode($response_fb['content']);
-$page_fb = isset($responseData_fb->data->fb_template) ? $responseData_fb->data->fb_template : '';
-$validPages_fb = [
-    '1' => 'fb_themes/theme1/index.php',
-    '2' => 'fb_themes/theme2/index.php',
-    '3' => 'fb_themes/theme3/index.php',
-];
+// $response_fb = makeGetRequest('https://minimil.onrender.com/api/websites?domain_fb='. $current_domain);
+// $responseData_fb = json_decode($response_fb['content']);
+// $page_fb = isset($responseData_fb->data->fb_template) ? $responseData_fb->data->fb_template : '';
+// $validPages_fb = [
+//     '1' => 'fb_themes/theme1/index.php',
+//     '2' => 'fb_themes/theme2/index.php',
+//     '3' => 'fb_themes/theme3/index.php',
+// ];
 
-if (array_key_exists($page_fb, $validPages_fb) && file_exists($validPages_fb[$page_fb])) {
-    include $validPages_fb[$page_fb];
-}
+// if (array_key_exists($page_fb, $validPages_fb) && file_exists($validPages_fb[$page_fb])) {
+//     include $validPages_fb[$page_fb];
+// }
 ?>
