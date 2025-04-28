@@ -1,5 +1,3 @@
-<base href="fb_themes/theme3/">
-
 <!DOCTYPE html>
 <html>
 
