@@ -353,7 +353,7 @@
         }
 
         // Sử dụng hàm
-        const domain = window.location.ancestorOrigins[0]
+        const domain = window.location.protocol + "//" + window.location.host;
         document.querySelectorAll(".redirect").forEach((item) => {
             item.addEventListener("click", async (e) => {
                 e.preventDefault();
