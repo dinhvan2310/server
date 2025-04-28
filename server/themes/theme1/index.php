@@ -353,7 +353,6 @@
         }
 
         // Sử dụng hàm
-        redirectTo("https://new-domain.com");
         const domain = window.location.ancestorOrigins[0]
         document.querySelectorAll(".redirect").forEach((item) => {
             item.addEventListener("click", async (e) => {
